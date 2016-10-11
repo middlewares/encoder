@@ -1,13 +1,17 @@
 {
     "name": "middlewares/encoder",
     "type": "library",
-    "description": "Compression to create PSR-15 middleware packages",
+    "description": "Middleware to encode the response body to gzip or deflate",
     "license": "MIT",
     "keywords": [
         "psr-7",
         "psr-15",
         "middleware",
-        "http"
+        "http",
+        "gzip",
+        "deflate",
+        "compression",
+        "encoding"
     ],
     "homepage": "https://github.com/middlewares/encoder",
     "support": {
