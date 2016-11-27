@@ -2,9 +2,9 @@
 
 namespace Middlewares;
 
-use Interop\Http\Middleware\MiddlewareInterface;
+use Interop\Http\Middleware\ServerMiddlewareInterface;
 
-class DeflateEncoder extends Encoder implements MiddlewareInterface
+class DeflateEncoder extends Encoder implements ServerMiddlewareInterface
 {
     /**
      * @var string
