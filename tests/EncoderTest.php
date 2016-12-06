@@ -13,13 +13,13 @@ class EncoderTest extends \PHPUnit_Framework_TestCase
     {
         $request = Factory::createServerRequest()->withHeader('Accept-Encoding', 'gzip,deflate');
 
-        $response = (new Dispatcher([
+        $response = Dispatcher::run([
             new DeflateEncoder(),
             new GzipEncoder(),
             function () {
                 echo 'Hello world';
             },
-        ]))->dispatch($request);
+        ], $request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals('gzip', $response->getHeaderLine('Content-Encoding'));
@@ -30,13 +30,13 @@ class EncoderTest extends \PHPUnit_Framework_TestCase
     {
         $request = Factory::createServerRequest()->withHeader('Accept-Encoding', 'gzip,deflate');
 
-        $response = (new Dispatcher([
+        $response = Dispatcher::run([
             new GzipEncoder(),
             new DeflateEncoder(),
             function () {
                 echo 'Hello world';
             },
-        ]))->dispatch($request);
+        ], $request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertEquals('deflate', $response->getHeaderLine('Content-Encoding'));
@@ -47,13 +47,13 @@ class EncoderTest extends \PHPUnit_Framework_TestCase
     {
         $request = Factory::createServerRequest()->withHeader('Accept-Encoding', 'foo');
 
-        $response = (new Dispatcher([
+        $response = Dispatcher::run([
             new DeflateEncoder(),
             new GzipEncoder(),
             function () {
                 echo 'Hello world';
             },
-        ]))->dispatch($request);
+        ], $request);
 
         $this->assertInstanceOf('Psr\\Http\\Message\\ResponseInterface', $response);
         $this->assertFalse($response->hasHeader('Content-Encoding'));
