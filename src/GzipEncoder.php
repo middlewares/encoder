@@ -2,9 +2,9 @@
 
 namespace Middlewares;
 
-use Interop\Http\Middleware\ServerMiddlewareInterface;
+use Interop\Http\ServerMiddleware\MiddlewareInterface;
 
-class GzipEncoder extends Encoder implements ServerMiddlewareInterface
+class GzipEncoder extends Encoder implements MiddlewareInterface
 {
     /**
      * @var string
