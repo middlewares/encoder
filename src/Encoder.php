@@ -31,6 +31,12 @@ abstract class Encoder
             $stream = Utils\Factory::createStream();
             $stream->write($this->encode((string) $response->getBody()));
 
+            if ($stream->getSize() !== null) {
+                $response = $response->withHeader('Content-Length', (string) $stream->getSize());
+            } else {
+                $response = $response->withoutHeader('Content-Length');
+            }
+
             return $response
                 ->withHeader('Content-Encoding', $this->encoding)
                 ->withBody($stream);
