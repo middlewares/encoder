@@ -5,6 +5,7 @@ namespace Middlewares;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Interop\Http\ServerMiddleware\DelegateInterface;
+use Middlewares\Utils\Helpers;
 
 abstract class Encoder
 {
@@ -31,15 +32,11 @@ abstract class Encoder
             $stream = Utils\Factory::createStream();
             $stream->write($this->encode((string) $response->getBody()));
 
-            if ($stream->getSize() !== null) {
-                $response = $response->withHeader('Content-Length', (string) $stream->getSize());
-            } else {
-                $response = $response->withoutHeader('Content-Length');
-            }
-
-            return $response
+            $response = $response
                 ->withHeader('Content-Encoding', $this->encoding)
                 ->withBody($stream);
+
+            return Helpers::fixContentLength($response);
         }
 
         return $response;
