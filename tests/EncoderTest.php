@@ -2,11 +2,11 @@
 
 namespace Middlewares\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Middlewares\GzipEncoder;
 use Middlewares\DeflateEncoder;
+use Middlewares\GzipEncoder;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
+use PHPUnit\Framework\TestCase;
 
 class EncoderTest extends TestCase
 {
