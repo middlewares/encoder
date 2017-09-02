@@ -23,7 +23,6 @@ class EncoderTest extends TestCase
         ], $request);
 
         $this->assertEquals('gzip', $response->getHeaderLine('Content-Encoding'));
-        $this->assertEquals($response->getBody()->getSize(), $response->getHeaderLine('Content-Length'));
         $this->assertEquals(gzencode('Hello world'), (string) $response->getBody());
     }
 
@@ -40,7 +39,6 @@ class EncoderTest extends TestCase
         ], $request);
 
         $this->assertEquals('deflate', $response->getHeaderLine('Content-Encoding'));
-        $this->assertEquals($response->getBody()->getSize(), $response->getHeaderLine('Content-Length'));
         $this->assertEquals(gzdeflate('Hello world'), (string) $response->getBody());
     }
 
