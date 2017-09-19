@@ -2,7 +2,7 @@
 
 namespace Middlewares;
 
-use Interop\Http\ServerMiddleware\DelegateInterface;
+use Interop\Http\Server\RequestHandlerInterface;
 use Middlewares\Utils\Helpers;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,14 +17,14 @@ abstract class Encoder
     /**
      * Process a request and return a response.
      *
-     * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param ServerRequestInterface  $request
+     * @param RequestHandlerInterface $handler
      *
      * @return ResponseInterface
      */
-    public function process(ServerRequestInterface $request, DelegateInterface $delegate)
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler)
     {
-        $response = $delegate->process($request);
+        $response = $handler->handle($request);
 
         if (stripos($request->getHeaderLine('Accept-Encoding'), $this->encoding) !== false
             && !$response->hasHeader('Content-Encoding')

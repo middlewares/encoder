@@ -2,7 +2,7 @@
 
 namespace Middlewares;
 
-use Interop\Http\ServerMiddleware\MiddlewareInterface;
+use Interop\Http\Server\MiddlewareInterface;
 
 class GzipEncoder extends Encoder implements MiddlewareInterface
 {
