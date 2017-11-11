@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace Middlewares;
 
@@ -14,7 +15,7 @@ class DeflateEncoder extends Encoder implements MiddlewareInterface
     /**
      * {@inheritdoc}
      */
-    protected function encode($content)
+    protected function encode(string $content): string
     {
         return gzdeflate($content);
     }
