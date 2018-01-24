@@ -3,8 +3,7 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
-use Interop\Http\Server\RequestHandlerInterface;
-use Middlewares\Utils\Helpers;
+use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -28,11 +27,10 @@ abstract class Encoder
             $stream = Utils\Factory::createStream();
             $stream->write($this->encode((string) $response->getBody()));
 
-            $response = $response
+            return $response
                 ->withHeader('Content-Encoding', $this->encoding)
+                ->withoutHeader('Content-Length')
                 ->withBody($stream);
-
-            return Helpers::fixContentLength($response);
         }
 
         return $response;
