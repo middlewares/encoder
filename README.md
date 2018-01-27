@@ -7,7 +7,7 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 [![SensioLabs Insight][ico-sensiolabs]][link-sensiolabs]
 
-Middleware to encode the response body to `gzip` or `deflate` encodings and add the `Content-Encoding` header. This package is splitted into the following components:
+Middleware to encode the response body to `gzip` or `deflate` if the `Accept-Encoding` header is present and adds the `Content-Encoding` header. This package is splitted into the following components:
 
 * [GzipEncoder](#gzipencoder)
 * [DeflateEncoder](#deflateencoder)
