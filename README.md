@@ -17,7 +17,7 @@ You can use the component `ContentEncoding` in the [middlewares/negotiation](htt
 ## Requirements
 
 * PHP >= 7.0
-* A [PSR-7](https://packagist.org/providers/psr/http-message-implementation) http message implementation ([Diactoros](https://github.com/zendframework/zend-diactoros), [Guzzle](https://github.com/guzzle/psr7), [Slim](https://github.com/slimphp/Slim), etc...)
+* A [PSR-7 http library](https://github.com/middlewares/awesome-psr15-middlewares#psr-7-implementations)
 * A [PSR-15 middleware dispatcher](https://github.com/middlewares/awesome-psr15-middlewares#dispatcher)
 
 ## Installation
@@ -49,6 +49,12 @@ Compress the response body to GZIP format using [gzencode](http://php.net/manual
 Compress the response body to Deflate format using [gzdeflate](http://php.net/manual/en/function.gzdeflate.php) and add the header `Content-Encoding: deflate`.
 
 **Note:** The response body is encoded only if the header contains the value `deflate` in the header `Accept-Encoding`.
+
+## Options
+
+#### `streamFactory(Psr\Http\Message\StreamFactoryInterface $streamFactory)`
+
+A PSR-17 factory to create the new response bodies.
 
 ---
 

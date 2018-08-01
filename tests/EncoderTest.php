@@ -13,7 +13,7 @@ class EncoderTest extends TestCase
 {
     public function testGzipEncoder()
     {
-        $request = Factory::createServerRequest()->withHeader('Accept-Encoding', 'gzip,deflate');
+        $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
         $response = Dispatcher::run([
             new DeflateEncoder(),
@@ -29,7 +29,7 @@ class EncoderTest extends TestCase
 
     public function testDeflateEncoder()
     {
-        $request = Factory::createServerRequest()->withHeader('Accept-Encoding', 'gzip,deflate');
+        $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
         $response = Dispatcher::run([
             new GzipEncoder(),
@@ -45,7 +45,7 @@ class EncoderTest extends TestCase
 
     public function testNoEncoder()
     {
-        $request = Factory::createServerRequest()->withHeader('Accept-Encoding', 'foo');
+        $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'foo');
 
         $response = Dispatcher::run([
             new DeflateEncoder(),
