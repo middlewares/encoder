@@ -54,7 +54,7 @@ Compress the response body to Deflate format using [gzdeflate](http://php.net/ma
 
 #### `streamFactory(Psr\Http\Message\StreamFactoryInterface $streamFactory)`
 
-A PSR-17 factory to create the new response bodies.
+A PSR-17 factory to create the response bodies.
 
 ---
 
