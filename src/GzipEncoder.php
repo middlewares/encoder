@@ -17,6 +17,6 @@ class GzipEncoder extends Encoder implements MiddlewareInterface
      */
     protected function encode(string $content): string
     {
-        return gzencode($content);
+        return (string) gzencode($content);
     }
 }

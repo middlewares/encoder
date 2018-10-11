@@ -17,6 +17,6 @@ class DeflateEncoder extends Encoder implements MiddlewareInterface
      */
     protected function encode(string $content): string
     {
-        return gzdeflate($content);
+        return (string) gzdeflate($content);
     }
 }
