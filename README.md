@@ -27,24 +27,16 @@ This package is installable and autoloadable via Composer as [middlewares/encode
 composer require middlewares/encoder
 ```
 
-## Usage
-
-```php
-Dispatcher::run([
-	new Middlewares\GzipEncoder(),
-]);
-
-$response = $dispatcher->dispatch(new ServerRequest());
-```
-
-### GzipEncoder
+## GzipEncoder
 
 Compress the response body to GZIP format using [gzencode](http://php.net/manual/en/function.gzencode.php) and add the header `Content-Encoding: gzip`.
 
 **Note:** The response body is encoded only if the header contains the value `gzip` in the header `Accept-Encoding`.
 
 ```php
-$encoder = new Middlewares\GzipEncoder();
+Dispatcher::run([
+	new Middlewares\GzipEncoder(),
+]);
 ```
 
 Optionally, you can provide a `Psr\Http\Message\StreamFactoryInterface` that will be used to create the response body. If it's not defined, [Middleware\Utils\Factory](https://github.com/middlewares/utils#factory) will be used to detect it automatically.
@@ -55,14 +47,16 @@ $streamFactory = new MyOwnStreamFactory();
 $encoder = new Middlewares\GzipEncoder($streamFactory);
 ```
 
-### DeflateEncoder
+## DeflateEncoder
 
 Compress the response body to Deflate format using [gzdeflate](http://php.net/manual/en/function.gzdeflate.php) and add the header `Content-Encoding: deflate`.
 
 **Note:** The response body is encoded only if the header contains the value `deflate` in the header `Accept-Encoding`.
 
 ```php
-$encoder = new Middlewares\DeflateEncoder();
+Dispatcher::run([
+	new Middlewares\DeflateEncoder(),
+]);
 ```
 
 Optionally, you can provide a `Psr\Http\Message\StreamFactoryInterface` that will be used to create the response body. If it's not defined, [Middleware\Utils\Factory](https://github.com/middlewares/utils#factory) will be used to detect it automatically.
