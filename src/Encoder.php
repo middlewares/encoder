@@ -16,6 +16,11 @@ abstract class Encoder
      */
     protected $encoding;
 
+    /**
+     * @var StreamFactoryInterface
+     */
+    protected $streamFactory;
+
     public function __construct(StreamFactoryInterface $streamFactory = null)
     {
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
