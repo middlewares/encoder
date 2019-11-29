@@ -3,17 +3,14 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
-use Middlewares\Utils\Traits\HasStreamFactory;
 use Middlewares\Utils\Factory;
-use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 abstract class Encoder
 {
-    use HasStreamFactory;
-
     /**
      * @var string
      */
@@ -34,7 +31,7 @@ abstract class Encoder
         if (stripos($request->getHeaderLine('Accept-Encoding'), $this->encoding) !== false
             && !$response->hasHeader('Content-Encoding')
         ) {
-            $stream = $this->createStream($this->encode((string) $response->getBody()));
+            $stream = $this->streamFactory->createStream($this->encode((string) $response->getBody()));
 
             return $response
                 ->withHeader('Content-Encoding', $this->encoding)
