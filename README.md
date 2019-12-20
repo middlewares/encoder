@@ -67,6 +67,19 @@ $streamFactory = new MyOwnStreamFactory();
 $encoder = new Middlewares\DeflateEncoder($streamFactory);
 ```
 
+## Common Options
+
+### `withCompressPreg(string $expression)`
+
+This allows the overring of the default regex used to detect what resources are already compressed. The default detects 
+the following mime types `text/*`, `application/json`, `image/svg+xml` and empty content types as compressible.
+```php
+Dispatcher::run([
+	(new Middlewares\DeflateEncoder())
+            ->withCompressablePreg('^/application/pdf$/'),
+]);
+```
+
 ---
 
 Please see [CHANGELOG](CHANGELOG.md) for more information about recent changes and [CONTRIBUTING](CONTRIBUTING.md) for contributing details.

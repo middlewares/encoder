@@ -21,6 +21,8 @@ abstract class Encoder
      */
     protected $streamFactory;
 
+    private $rxCompressable = '_^(image/svg\+xml|text/.*|application/json|)(;.*)?$_';
+
     public function __construct(StreamFactoryInterface $streamFactory = null)
     {
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
@@ -35,12 +37,17 @@ abstract class Encoder
 
         if (stripos($request->getHeaderLine('Accept-Encoding'), $this->encoding) !== false
             && !$response->hasHeader('Content-Encoding')
+            && preg_match($this->rxCompressable, $response->getHeaderLine('Content-Type'))
         ) {
             $stream = $this->streamFactory->createStream($this->encode((string) $response->getBody()));
-
+            $vary = array_filter(array_map('trim', explode(',', $response->getHeaderLine('Vary'))));
+            if (!in_array('Accept-Encoding', $vary, true)) {
+                $vars[] = 'Accept-Encoding';
+            }
             return $response
                 ->withHeader('Content-Encoding', $this->encoding)
-                ->withoutHeader('Content-Length')
+                ->withHeader('Content-Length', $stream->getSize())
+                ->withHeader('Vary', implode(',', $vary))
                 ->withBody($stream);
         }
 
@@ -51,4 +58,11 @@ abstract class Encoder
      * Encode the body content.
      */
     abstract protected function encode(string $content): string;
+
+    public function withCompressablePreg($rx)
+    {
+        $new = clone $this;
+        $new->rxCompressable = $rx;
+        return $new;
+    }
 }
