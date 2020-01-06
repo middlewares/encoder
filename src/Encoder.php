@@ -46,7 +46,6 @@ abstract class Encoder
             }
             return $response
                 ->withHeader('Content-Encoding', $this->encoding)
-                ->withHeader('Content-Length', $stream->getSize())
                 ->withHeader('Vary', implode(',', $vary))
                 ->withBody($stream);
         }
