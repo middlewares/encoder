@@ -69,17 +69,27 @@ $encoder = new Middlewares\DeflateEncoder($streamFactory);
 
 ## Common Options
 
-### `withCompressPreg(string $expression)`
+### `contentTypeRegex(string $expression)`
 
 This allows the overring of the default regex used to detect what resources are already compressed. The default detects 
 the following mime types `text/*`, `application/json`, `image/svg+xml` and empty content types as compressible.
 ```php
 Dispatcher::run([
 	(new Middlewares\DeflateEncoder())
-            ->withCompressablePreg('^/application/pdf$/'),
+            ->contentTypeRegex('/^application\/pdf$/'),
 ]);
 ```
 
+### `contentTypeList(string ...$list)`
+
+This allows the overring of the default regex used to detect what resources are already compressed. This requires that 
+the content type match the list provided.
+```php
+Dispatcher::run([
+	(new Middlewares\DeflateEncoder())
+            ->contentTypeList('text/plain','text/html','text/csv'),
+]);
+```
 ---
 
 Please see [CHANGELOG](CHANGELOG.md) for more information about recent changes and [CONTRIBUTING](CONTRIBUTING.md) for contributing details.

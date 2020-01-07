@@ -112,6 +112,38 @@ class EncoderTest extends TestCase
         }
     }
 
+    public function testCompressTypes()
+    {
+        $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
+
+        $response = Dispatcher::run([
+            (new GzipEncoder())->contentTypeList('text/plain', 'text/html'),
+            function () {
+                return self::makeResponse('text/html', 'html');
+            },
+        ], $request);
+
+        $this->assertEquals(
+            true,
+            $response->hasHeader('Content-Encoding'),
+            'Content encoding should only be added to non compressed responses'
+        );
+        $this->assertEquals('html', gzdecode((string) $response->getBody()));
+
+        $response = Dispatcher::run([
+            (new GzipEncoder())->contentTypeList('text/plain', 'text/html'),
+            function () {
+                return self::makeResponse('image/gif', '##GIF##');
+            },
+        ], $request);
+        $this->assertEquals(
+            false,
+            $response->hasHeader('Content-Encoding'),
+            'Content encoding should only be added to non compressed responses'
+        );
+        $this->assertEquals('##GIF##', (string) $response->getBody());
+    }
+
     public static function makeResponse($contentType, $body)
     {
         $res = Factory::createResponse(200)

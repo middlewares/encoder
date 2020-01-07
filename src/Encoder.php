@@ -22,6 +22,7 @@ abstract class Encoder
     protected $streamFactory;
 
     private $rxCompressable = '_^(image/svg\+xml|text/.*|application/json|)(;.*)?$_';
+    private $mimeCompressable = [];
 
     public function __construct(StreamFactoryInterface $streamFactory = null)
     {
@@ -37,7 +38,7 @@ abstract class Encoder
 
         if (stripos($request->getHeaderLine('Accept-Encoding'), $this->encoding) !== false
             && !$response->hasHeader('Content-Encoding')
-            && preg_match($this->rxCompressable, $response->getHeaderLine('Content-Type'))
+            && $this->isCompressible($response)
         ) {
             $stream = $this->streamFactory->createStream($this->encode((string) $response->getBody()));
             $vary = array_filter(array_map('trim', explode(',', $response->getHeaderLine('Vary'))));
@@ -58,10 +59,38 @@ abstract class Encoder
      */
     abstract protected function encode(string $content): string;
 
-    public function withCompressablePreg($rx)
+    /**
+     * Set a regex to test if content-type is compressible, and clears list of types
+     *
+     * @param  string $rx Regular Expression to test if content is compressable
+     * @return $this
+     */
+    public function contentTypeRegex(string $rx): self
     {
-        $new = clone $this;
-        $new->rxCompressable = $rx;
-        return $new;
+        $this->rxCompressable = $rx;
+        $this->mimeCompressable = [];
+        return $this;
+    }
+
+    /**
+     * Sets the list of compressible content-types, and clears the regex
+     *
+     * @param  string ...$types List of content types to compress
+     * @return $this
+     */
+    public function contentTypeList(string ...$types): self
+    {
+        $this->mimeCompressable = $types;
+        $this->rxCompressable = null;
+        return $this;
+    }
+
+    private function isCompressible(ResponseInterface $response): bool
+    {
+        $contentType = $response->getHeaderLine('Content-Type') ?: 'text/html';
+        if ($this->rxCompressable) {
+            return preg_match($this->rxCompressable, $contentType) === 1;
+        }
+        return in_array($contentType, $this->mimeCompressable, true);
     }
 }
