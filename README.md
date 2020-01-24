@@ -69,12 +69,12 @@ $encoder = new Middlewares\DeflateEncoder($streamFactory);
 
 ## Common Options
 
-### `contentType(string ...$patterns)`
+### contentType
 
-This allows the overring of the default patterns used to detect what resources are already compressed. The default 
-pattern detects the following mime types `text/*`, `application/json`, `image/svg+xml` and empty content types as 
-compressible. If the pattern begins with a forward slash `/` it is tested as a regular expression, otherwise its is
-case-insensitive string comparison.
+This option allows the overring of the default patterns used to detect what resources are already compressed.
+
+The default pattern detects the following mime types `text/*`, `application/json`, `image/svg+xml` and empty content types as compressible. If the pattern begins with a forward slash `/` it is tested as a regular expression, otherwise its is case-insensitive string comparison.
+
 ```php
 Dispatcher::run([
 	(new Middlewares\DeflateEncoder())
