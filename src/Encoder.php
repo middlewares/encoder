@@ -76,7 +76,7 @@ abstract class Encoder
     private function isCompressible(ResponseInterface $response): bool
     {
         $contentType = $response->getHeaderLine('Content-Type') ?: 'text/html';
-        foreach ($this->rxCompressable as $pattern) {
+        foreach ($this->patterns as $pattern) {
             if (strpos($pattern, '/') === 0) {
                 if (preg_match($pattern, $contentType) === 1) {
                     return true;
