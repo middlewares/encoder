@@ -21,6 +21,11 @@ abstract class Encoder
      */
     protected $streamFactory;
 
+    /**
+     * @var string[] List of regular expressions to test if content type is compressible
+     */
+    private $rxCompressable = ['/^(image\/svg\\+xml|text\/.*|application\/json)(;.*)?$/'];
+
     public function __construct(StreamFactoryInterface $streamFactory = null)
     {
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
@@ -35,12 +40,16 @@ abstract class Encoder
 
         if (stripos($request->getHeaderLine('Accept-Encoding'), $this->encoding) !== false
             && !$response->hasHeader('Content-Encoding')
+            && $this->isCompressible($response)
         ) {
             $stream = $this->streamFactory->createStream($this->encode((string) $response->getBody()));
-
+            $vary = array_filter(array_map('trim', explode(',', $response->getHeaderLine('Vary'))));
+            if (!in_array('Accept-Encoding', $vary, true)) {
+                $vars[] = 'Accept-Encoding';
+            }
             return $response
                 ->withHeader('Content-Encoding', $this->encoding)
-                ->withoutHeader('Content-Length')
+                ->withHeader('Vary', implode(',', $vary))
                 ->withBody($stream);
         }
 
@@ -51,4 +60,33 @@ abstract class Encoder
      * Encode the body content.
      */
     abstract protected function encode(string $content): string;
+
+    /**
+     * Sets the list of compressible content-type patterns. If pattern begins with '/' treat as regular expression
+     *
+     * @param  string[] $typePatterns List of patterns to compare to Content-Type
+     * @return $this
+     */
+    public function contentType(string ...$typePatterns): self
+    {
+        $this->rxCompressable = $typePatterns;
+        return $this;
+    }
+
+    private function isCompressible(ResponseInterface $response): bool
+    {
+        $contentType = $response->getHeaderLine('Content-Type') ?: 'text/html';
+        foreach ($this->rxCompressable as $pattern) {
+            if (strpos($pattern, '/') === 0) {
+                if (preg_match($pattern, $contentType) === 1) {
+                    return true;
+                }
+            } else {
+                if (strcasecmp($pattern, $contentType) === 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
