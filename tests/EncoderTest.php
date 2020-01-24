@@ -79,6 +79,7 @@ class EncoderTest extends TestCase
             ['text/html', '#HTML', false],
             ['text/html;charset=UTF-8', '#HTML', false],
             ['text/xml', '#XML', false],
+            ['', '#UNKNOWN', false],
         ];
     }
 
@@ -117,7 +118,7 @@ class EncoderTest extends TestCase
         $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
         $response = Dispatcher::run([
-            (new GzipEncoder())->contentTypeList('text/plain', 'text/html'),
+            (new GzipEncoder())->contentType('text/plain', 'text/html'),
             function () {
                 return self::makeResponse('text/html', 'html');
             },
@@ -130,8 +131,10 @@ class EncoderTest extends TestCase
         );
         $this->assertEquals('html', gzdecode((string) $response->getBody()));
 
+        $encoder = (new GzipEncoder())->contentType('/text\/.*/');
+
         $response = Dispatcher::run([
-            (new GzipEncoder())->contentTypeList('text/plain', 'text/html'),
+            $encoder,
             function () {
                 return self::makeResponse('image/gif', '##GIF##');
             },
@@ -142,6 +145,19 @@ class EncoderTest extends TestCase
             'Content encoding should only be added to non compressed responses'
         );
         $this->assertEquals('##GIF##', (string) $response->getBody());
+
+        $csvResponse = Dispatcher::run([
+            $encoder,
+            function () {
+                return self::makeResponse('text/csv', '##CSV##');
+            },
+        ], $request);
+        $this->assertEquals(
+            true,
+            $csvResponse->hasHeader('Content-Encoding'),
+            'Content encoding should only be added to non compressed responses'
+        );
+        $this->assertEquals('##CSV##', gzdecode((string) $csvResponse->getBody()));
     }
 
     public static function makeResponse($contentType, $body)
