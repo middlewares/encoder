@@ -18,6 +18,7 @@
         "issues": "https://github.com/middlewares/encoder/issues"
     },
     "require": {
+        "ext-zlib": "*",
         "php": "^7.2",
         "middlewares/utils": "^3.0",
         "psr/http-server-middleware": "^1.0"
