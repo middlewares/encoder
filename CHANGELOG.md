@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.1] - 2020-12-03
+### Added
+- Support for PHP 8.0
+
 ## [2.1.0] - 2020-01-24
 ### Added
 - New option `contentType()` to set a list of content types that should be compressed [#3], [#4]
@@ -77,6 +81,7 @@ First version
 [#3]: https://github.com/middlewares/encoder/issues/3
 [#4]: https://github.com/middlewares/encoder/issues/4
 
+[2.1.1]: https://github.com/middlewares/encoder/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/middlewares/encoder/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/middlewares/encoder/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/middlewares/encoder/compare/v1.0.0...v1.1.0
