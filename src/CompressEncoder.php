@@ -13,11 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CompressEncoder
 {
     /**
-     * @var string
-     */
-    protected $encoding;
-
-    /**
      * @var StreamFactoryInterface
      */
     protected $streamFactory;

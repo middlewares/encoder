@@ -13,7 +13,7 @@ final class ZStdCompressor implements CompressorInterface
      * @link https://github.com/kjdev/php-ext-zstd
      * @param int $level ZStd Compression Level
      */
-    public function __construct(int $level = ZSTD_COMPRESS_LEVEL_DEFAULT)
+    public function __construct(int $level = \ZSTD_COMPRESS_LEVEL_DEFAULT)
     {
         $this->level = $level;
     }
@@ -25,7 +25,7 @@ final class ZStdCompressor implements CompressorInterface
 
     public function compress(string $input): string
     {
-        $out = zstd_compress($input, $this->level);
+        $out = \zstd_compress($input, $this->level);
         if ($out === false) {
             throw new \RuntimeException('Error occurred while compressing output');
         }
