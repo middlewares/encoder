@@ -11,9 +11,9 @@ final class BrotliCompressor implements CompressorInterface
      * Brotli Compression Support (requires brotli php extension)
      *
      * @link https://github.com/kjdev/php-ext-brotli
-     * @param int $level Brotli Compression Level, 11 is default
+     * @param int $level Brotli Compression Level, 5 is default (small than gzip, about as fast)
      */
-    public function __construct(int $level = 11)
+    public function __construct(int $level = 5)
     {
         $this->level = $level;
     }
