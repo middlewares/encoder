@@ -51,9 +51,8 @@ class CompressEncoder
         $response = $handler->handle($request);
 
         $compressor = $this->getCompressor($request);
-        if (
-            !$response->hasHeader('Content-Encoding')
-            && $compressor
+        if ($compressor
+            && !$response->hasHeader('Content-Encoding')
             && $this->isCompressible($response)
         ) {
             $stream = $this->streamFactory->createStream($compressor->compress((string) $response->getBody()));
