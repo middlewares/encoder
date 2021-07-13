@@ -25,7 +25,7 @@ final class DeflateCompressor implements CompressorInterface
     public function compress(string $input): string
     {
         $out = gzdeflate($input, $this->level);
-        if($out === false) {
+        if ($out === false) {
             throw new \RuntimeException('Error occurred while compressing output');
         }
         return $out;

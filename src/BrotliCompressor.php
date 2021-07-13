@@ -26,7 +26,7 @@ final class BrotliCompressor implements CompressorInterface
     public function compress(string $input): string
     {
         $out = brotli_compress($input, $this->level);
-        if($out === false) {
+        if ($out === false) {
             throw new \RuntimeException('Error occurred while compressing output');
         }
         return $out;
