@@ -3,20 +3,13 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
-class DeflateEncoder extends Encoder implements MiddlewareInterface
+class DeflateEncoder extends CompressEncoder implements MiddlewareInterface
 {
-    /**
-     * @var string
-     */
-    protected $encoding = 'deflate';
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function encode(string $content): string
+    public function __construct(StreamFactoryInterface $streamFactory = null)
     {
-        return (string) gzdeflate($content);
+        parent::__construct($streamFactory, [new DeflateCompressor()]);
     }
 }

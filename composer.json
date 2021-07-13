@@ -31,6 +31,10 @@
         "oscarotero/php-cs-fixer-config": "^1.0",
         "phpstan/phpstan": "^0.12"
     },
+    "suggest": {
+        "ext-brotli": "Enable Brotli Compression",
+        "ext-zstd": "Enable ZStd Compression"
+    },
     "autoload": {
         "psr-4": {
             "Middlewares\\": "src/"

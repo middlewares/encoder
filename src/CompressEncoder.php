@@ -4,12 +4,13 @@ declare(strict_types = 1);
 namespace Middlewares;
 
 use Middlewares\Utils\Factory;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-abstract class Encoder
+class CompressEncoder
 {
     /**
      * @var string
@@ -26,9 +27,20 @@ abstract class Encoder
      */
     private $patterns = ['/^(image\/svg\\+xml|text\/.*|application\/json)(;.*)?$/'];
 
-    public function __construct(StreamFactoryInterface $streamFactory = null)
+    /**
+     * @var CompressorInterface[]
+     */
+    private $compressors;
+
+    /**
+     * CompressEncoder constructor.
+     * @param StreamFactoryInterface|null $streamFactory
+     * @param CompressorInterface[]|null  $compressors
+     */
+    public function __construct(StreamFactoryInterface $streamFactory = null, array $compressors = null)
     {
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
+        $this->compressors = $compressors ?: $this->allAvailableCompressors();
     }
 
     /**
@@ -38,11 +50,13 @@ abstract class Encoder
     {
         $response = $handler->handle($request);
 
-        if (stripos($request->getHeaderLine('Accept-Encoding'), $this->encoding) !== false
-            && !$response->hasHeader('Content-Encoding')
+        $compressor = $this->getCompressor($request);
+        if (
+            !$response->hasHeader('Content-Encoding')
+            && $compressor
             && $this->isCompressible($response)
         ) {
-            $stream = $this->streamFactory->createStream($this->encode((string) $response->getBody()));
+            $stream = $this->streamFactory->createStream($compressor->compress((string) $response->getBody()));
             $vary = array_filter(array_map('trim', explode(',', $response->getHeaderLine('Vary'))));
 
             if (!in_array('Accept-Encoding', $vary, true)) {
@@ -50,18 +64,13 @@ abstract class Encoder
             }
 
             return $response
-                ->withHeader('Content-Encoding', $this->encoding)
+                ->withHeader('Content-Encoding', $compressor->name())
                 ->withHeader('Vary', implode(',', $vary))
                 ->withBody($stream);
         }
 
         return $response;
     }
-
-    /**
-     * Encode the body content.
-     */
-    abstract protected function encode(string $content): string;
 
     /**
      * Sets the list of compressible content-type patterns.
@@ -71,6 +80,17 @@ abstract class Encoder
     {
         $this->patterns = $patterns;
         return $this;
+    }
+
+    private function getCompressor(RequestInterface $request): ?CompressorInterface
+    {
+        $acceptEncoding = $request->getHeaderLine('Accept-Encoding');
+        foreach ($this->compressors as $comp) {
+            if (stripos($acceptEncoding, $comp->name()) !== false) {
+                return $comp;
+            }
+        }
+        return null;
     }
 
     private function isCompressible(ResponseInterface $response): bool
@@ -88,5 +108,21 @@ abstract class Encoder
             }
         }
         return false;
+    }
+
+    /**
+     * @return CompressorInterface[]
+     */
+    private function allAvailableCompressors(): array
+    {
+        $o = [];
+        if (function_exists('zstd_compress')) {
+            $o[] = new ZStdCompressor();
+        }
+        if (function_exists('brotli_compress')) {
+            $o[] = new BrotliCompressor();
+        }
+        $o[] = new GzipCompressor();
+        return $o;
     }
 }
