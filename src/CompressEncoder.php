@@ -117,6 +117,7 @@ class CompressEncoder
             $o[] = new BrotliCompressor();
         }
         $o[] = new GzipCompressor();
+        $o[] = new DeflateCompressor();
         return $o;
     }
 }
