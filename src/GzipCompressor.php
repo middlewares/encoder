@@ -24,6 +24,10 @@ final class GzipCompressor implements CompressorInterface
 
     public function compress(string $input): string
     {
-        return gzencode($input, $this->level);
+        $out = gzencode($input, $this->level);
+        if($out === false) {
+            throw new \RuntimeException('Error occurred while compressing output');
+        }
+        return $out;
     }
 }
