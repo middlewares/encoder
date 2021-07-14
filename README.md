@@ -44,9 +44,9 @@ CompressEncoder middleware.
 ```diff
 Dispatcher::run([
 ...
-- 	new Middlewares\GzipEncoder(),
-- 	new Middlewares\DeflateEncoder(),
-+ 	new Middlewares\CompressEncoder(),
+- 	new \Middlewares\GzipEncoder(),
+- 	new \Middlewares\DeflateEncoder(),
++ 	new \Middlewares\CompressEncoder(),
 ...
 ]);
 ```
@@ -77,7 +77,7 @@ If it's not defined, [Middleware\Utils\Factory](https://github.com/middlewares/u
 ```php
 $streamFactory = new MyOwnStreamFactory();
 
-$encoder = new Middlewares\CompressEncoder($streamFactory);
+$encoder = new \Middlewares\CompressEncoder($streamFactory);
 ```
 
 - You can also provide your own list of Compressors (that implement the `CompressorInterface`). For example:
