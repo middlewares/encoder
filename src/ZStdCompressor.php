@@ -14,7 +14,7 @@ final class ZStdCompressor implements CompressorInterface
      * @link https://github.com/kjdev/php-ext-zstd
      * @param int $level ZStd Compression Level
      */
-    public function __construct(int $level = \ZSTD_COMPRESS_LEVEL_DEFAULT)
+    public function __construct(int $level = 9)
     {
         $this->level = $level;
     }
