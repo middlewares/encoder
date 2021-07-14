@@ -44,9 +44,9 @@ CompressEncoder middleware.
 ```diff
 Dispatcher::run([
 ...
-- 	new \Middlewares\GzipEncoder(),
-- 	new \Middlewares\DeflateEncoder(),
-+ 	new \Middlewares\CompressEncoder(),
+- 	new Middlewares\GzipEncoder(),
+- 	new Middlewares\DeflateEncoder(),
++ 	new Middlewares\CompressEncoder(),
 ...
 ]);
 ```
@@ -65,7 +65,7 @@ Content-Type is considered compressible, and there is no `Content-Encoding` head
 
 ```php
 Dispatcher::run([
-	new \Middlewares\CompressEncoder(),
+	new Middlewares\CompressEncoder(),
 ]);
 ```
 
@@ -77,15 +77,15 @@ If it's not defined, [Middleware\Utils\Factory](https://github.com/middlewares/u
 ```php
 $streamFactory = new MyOwnStreamFactory();
 
-$encoder = new \Middlewares\CompressEncoder($streamFactory);
+$encoder = new Middlewares\CompressEncoder($streamFactory);
 ```
 
-- You can also provide your own list of Compressors (that implement the `CompressorInterface`). For example:
+- You can also provide your own list of Compressors (that implement the `Middlewares\CompressorInterface`). For example:
 
 ```php
-$encoder = new \Middlewares\CompressEncoder(null, [
-  new MyProject\LzmaEncoder(),
-  new \Middlewares\GZipEncoder($level = 9),
+$encoder = new Middlewares\CompressEncoder(null, [
+  new MyProject\LzmaCompressor(),
+  new Middlewares\GZipCompressor($level = 9),
 ]);
 
 ```
@@ -100,7 +100,7 @@ its is treated as a case-insensitive string comparison.
 
 ```php
 Dispatcher::run([
-	(new \Middlewares\CompressEncoder())
+	(new Middlewares\CompressEncoder())
             ->contentType(
                     '/^application\/pdf$/', // Regular Expression
                     'text/csv' // Text Pattern
@@ -116,8 +116,8 @@ The brotli compressor is used where the `Accept-Encoding` includes `br` and can 
 level, via a constructor parameter.
 
 ```php
-$encoder = new \Middlewares\CompressEncoder(null, [
-  new \Middlewares\BrotliCompressor($level = 1),
+$encoder = new Middlewares\CompressEncoder(null, [
+  new Middlewares\BrotliCompressor($level = 1),
 ]);
 ```
 ### DeflateCompressor
@@ -126,8 +126,8 @@ The deflate compressor is used where the `Accept-Encoding` includes `deflate` an
 level, via a constructor parameter.
 
 ```php
-$encoder = new \Middlewares\CompressEncoder(null, [
-  new \Middlewares\DeflateCompressor($level = 1),
+$encoder = new Middlewares\CompressEncoder(null, [
+  new Middlewares\DeflateCompressor($level = 1),
 ]);
 ```
 
@@ -137,8 +137,8 @@ The gzip compressor is used where the `Accept-Encoding` includes `gzip` and can 
 level, via a constructor parameter.
 
 ```php
-$encoder = new \Middlewares\CompressEncoder(null, [
-  new \Middlewares\GzipCompressor($level = 1),
+$encoder = new Middlewares\CompressEncoder(null, [
+  new Middlewares\GzipCompressor($level = 1),
 ]);
 ```
 
@@ -148,8 +148,8 @@ The gzip compressor is used where the `Accept-Encoding` includes `zstd` and can 
 level, via a constructor parameter.
 
 ```php
-$encoder = new \Middlewares\CompressEncoder(null, [
-  new \Middlewares\ZStdCompressor($level = 1),
+$encoder = new Middlewares\CompressEncoder(null, [
+  new Middlewares\ZStdCompressor($level = 1),
 ]);
 ```
 
@@ -163,7 +163,7 @@ Compress the response body to GZIP format using [gzencode](http://php.net/manual
 
 ```php
 Dispatcher::run([
-	new \Middlewares\GzipEncoder(),
+	new Middlewares\GzipEncoder(),
 ]);
 ```
 
@@ -179,7 +179,7 @@ Compress the response body to Deflate format using [gzdeflate](http://php.net/ma
 
 ```php
 Dispatcher::run([
-	new \Middlewares\DeflateEncoder(),
+	new Middlewares\DeflateEncoder(),
 ]);
 ```
 
