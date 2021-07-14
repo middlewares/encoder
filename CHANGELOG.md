@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2021-07-14
+
+### Added
+
+- Brotli & ZStd Compression are now support when the correspoding php extensions are avaiable
+
+### Changed
+ 
+- Generic CompressEncoder middleware with with pluggable Compressors now replaces the individual `GzipEncoder` and `DefalteEncoder`.
+
+### Deprecated
+
+- The `GzipEncoder` and the `DeflateEncoder` are now deprecated, as they are
+  just shims for backwards compatibility. Please replace them with `CompressEncoder`
+
+### Removed
+
+- The `Encoder` class has been removed, as its no longer functional.
+
 ## [2.1.1] - 2020-12-03
 ### Added
 - Support for PHP 8.0
