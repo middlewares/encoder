@@ -123,7 +123,6 @@ class EncoderTest extends TestCase
                 return self::makeResponse('text/html', 'html');
             },
         ], $request);
-
         $this->assertEquals(
             true,
             $response->hasHeader('Content-Encoding'),
