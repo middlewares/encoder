@@ -8,10 +8,11 @@ use Middlewares\GzipEncoder;
 use Middlewares\Utils\Dispatcher;
 use Middlewares\Utils\Factory;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
 
 class EncoderTest extends TestCase
 {
-    public function testGzipEncoder()
+    public function testGzipEncoder(): void
     {
         $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
@@ -29,7 +30,7 @@ class EncoderTest extends TestCase
         $this->assertEquals(gzencode('Hello world'), (string) $response->getBody());
     }
 
-    public function testDeflateEncoder()
+    public function testDeflateEncoder(): void
     {
         $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
@@ -47,7 +48,7 @@ class EncoderTest extends TestCase
         $this->assertEquals(gzdeflate('Hello world'), (string) $response->getBody());
     }
 
-    public function testNoEncoder()
+    public function testNoEncoder(): void
     {
         $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'foo');
 
@@ -65,7 +66,10 @@ class EncoderTest extends TestCase
         $this->assertEquals('Hello world', $body);
     }
 
-    public function contentTypeList()
+    /**
+     * @return array<array<string|bool>>
+     */
+    public function contentTypeList(): array
     {
         return [
             ['application/zip', '#ZIP', true],
@@ -89,7 +93,7 @@ class EncoderTest extends TestCase
      * @param mixed $body
      * @param mixed $isCompressed
      */
-    public function testNoDoubleCompress($contentType, $body, $isCompressed)
+    public function testNoDoubleCompress(string $contentType, string $body, bool $isCompressed): void
     {
         $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
@@ -113,7 +117,7 @@ class EncoderTest extends TestCase
         }
     }
 
-    public function testCompressTypes()
+    public function testCompressTypes(): void
     {
         $request = Factory::createServerRequest('GET', '/')->withHeader('Accept-Encoding', 'gzip,deflate');
 
@@ -160,7 +164,7 @@ class EncoderTest extends TestCase
         $this->assertEquals('##CSV##', gzdecode((string) $csvResponse->getBody()));
     }
 
-    public static function makeResponse($contentType, $body)
+    public static function makeResponse(string $contentType, string $body): ResponseInterface
     {
         $res = Factory::createResponse(200)
             ->withHeader('Content-Type', $contentType);

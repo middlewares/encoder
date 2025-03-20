@@ -26,7 +26,7 @@ abstract class Encoder
      */
     private $patterns = ['/^(image\/svg\\+xml|text\/.*|application\/json)(;.*)?$/'];
 
-    public function __construct(StreamFactoryInterface $streamFactory = null)
+    public function __construct(?StreamFactoryInterface $streamFactory = null)
     {
         $this->streamFactory = $streamFactory ?: Factory::getStreamFactory();
     }
