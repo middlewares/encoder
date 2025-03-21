@@ -85,6 +85,7 @@ First version
 [#3]: https://github.com/middlewares/encoder/issues/3
 [#4]: https://github.com/middlewares/encoder/issues/4
 
+[2.2.0]: https://github.com/middlewares/encoder/compare/v2.1.1...v2.2.0
 [2.1.1]: https://github.com/middlewares/encoder/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/middlewares/encoder/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/middlewares/encoder/compare/v1.1.0...v2.0.0
