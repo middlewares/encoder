@@ -89,9 +89,6 @@ class EncoderTest extends TestCase
 
     /**
      * @dataProvider contentTypeList
-     * @param mixed $contentType
-     * @param mixed $body
-     * @param mixed $isCompressed
      */
     public function testNoDoubleCompress(string $contentType, string $body, bool $isCompressed): void
     {
@@ -169,6 +166,7 @@ class EncoderTest extends TestCase
         $res = Factory::createResponse(200)
             ->withHeader('Content-Type', $contentType);
         $res->getBody()->write($body);
+
         return $res;
     }
 }

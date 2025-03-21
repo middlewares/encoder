@@ -70,6 +70,7 @@ abstract class Encoder
     public function contentType(string ...$patterns): self
     {
         $this->patterns = $patterns;
+
         return $this;
     }
 
@@ -87,6 +88,7 @@ abstract class Encoder
                 }
             }
         }
+
         return false;
     }
 }
