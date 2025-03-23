@@ -3,20 +3,17 @@ declare(strict_types = 1);
 
 namespace Middlewares;
 
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 
-class GzipEncoder extends Encoder implements MiddlewareInterface
-{
-    /**
-     * @var string
-     */
-    protected $encoding = 'gzip';
+/***
+ * @deprecated Replace with CompressEncoder
+ */
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function encode(string $content): string
+class GzipEncoder extends CompressEncoder implements MiddlewareInterface
+{
+    public function __construct(StreamFactoryInterface $streamFactory = null)
     {
-        return (string) gzencode($content);
+        parent::__construct($streamFactory, [new GzipCompressor()]);
     }
 }
